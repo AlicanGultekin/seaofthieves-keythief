@@ -9,7 +9,9 @@ const {
 const request = PROXY ? require('request-promise').defaults({ proxy: PROXY }) : require('request-promise');
 const jsonpath = require('jsonpath');
 const winston = require('winston');
+const NodeCache = require('node-cache');
 
+const threadCache = new NodeCache();
 const subreddit = SUBREDDIT || 'seaofthieves';
 const interval = INTERVAL || 10000;
 const keyRegex = /.{5}-.{5}-.{5}-.{5}-.{5}/g;
@@ -41,8 +43,9 @@ async function findKey(parsedNewPosts) {
     let result = null;
     try {
       // eslint-disable-next-line eqeqeq
-      if (newPost.title.match(/.*key.*/g) || newPost.selftext.match(keyRegex) || DEBUG == 'true') {
+      if ((newPost.title.match(/.*key.*/g) || newPost.selftext.match(keyRegex) || DEBUG == 'true') && !threadCache.get(newPost.id)) {
         result = {
+          id: newPost.id,
           title: newPost.title,
           body: newPost.selftext,
           url: newPost.url,
@@ -106,6 +109,7 @@ async function postResults(keys) {
   for (let index = 0; index < keys.length; index++) {
     const element = keys[index];
     if (element) {
+      threadCache.set(element.id, true);
       winston.info(JSON.stringify(element, null, 4));
       postToSlack(element);
     }
