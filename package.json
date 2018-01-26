@@ -1,0 +1,48 @@
+{
+  "name": "seaofthieves-reddit-keythief",
+  "version": "1.0.0",
+  "description": "Scans Sea of Thieves subreddit and parses closed beta keys",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "pm2start": "pm2 start ./index.js --name keythief",
+    "pm2stop": "pm2 stop keythief",
+    "test": "nyc ava --verbose",
+    "test:watch": "ava --watch",
+    "lint": "./node_modules/.bin/eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vitaefinis/seaofthieves-reddit-keythief.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vitaefinis/seaofthieves-reddit-keythief/issues"
+  },
+  "homepage": "https://github.com/Vitaefinis/seaofthieves-reddit-keythief#readme",
+  "readme": "readme.md",
+  "author": {
+    "name": "Alican Gültekin",
+    "website": "https://alicangultek.in"
+  },
+  "keywords": [
+    "sea",
+    "thieves"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "4.0.0",
+    "jsonpath": "1.0.0",
+    "request": "2.83.0",
+    "request-promise": "4.2.2",
+    "winston": "2.4.0"
+  },
+  "devDependencies": {
+    "ava": "0.24.0",
+    "eslint": "4.16.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-ava": "4.5.0",
+    "eslint-plugin-import": "2.8.0",
+    "nock": "9.1.6",
+    "nyc": "11.4.1"
+  }
+}

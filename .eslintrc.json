@@ -1,0 +1,17 @@
+{
+    "extends": [
+        "airbnb-base",
+        "plugin:ava/recommended"
+    ],
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "ava"
+    ]
+}
