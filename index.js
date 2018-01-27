@@ -25,8 +25,6 @@ const keyMentionRegex = /(giveaway|code|token|key)/g;
 const twitterBase64 = (Buffer.from(`${TWITTER_CONSUMER_KEY}:${TWITTER_CONSUMER_SECRET}`, 'ascii')).toString('base64');
 
 let twitterToken = '';
-let count = 0;
-
 
 function removeDuplicatesFromArray(arr) {
   return arr.filter((elem, index, self) => index === self.indexOf(elem));
@@ -302,7 +300,7 @@ async function huntKeysOnTwitter() {
 async function huntKeys() {
   try {
     // eslint-disable-next-line no-plusplus
-    winston.info(`Parse Attempt #${++count} [${Date().toString()}]`);
+    winston.info(`Parse Attempt [${Date().toString()}]`);
 
     const keysFromTwitter = await huntKeysOnTwitter();
     if (keysFromTwitter) postResults(keysFromTwitter);
