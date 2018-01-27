@@ -307,12 +307,11 @@ async function huntKeys() {
 
     const keysFromReddit = await huntKeysOnReddit();
     if (keysFromReddit) postResults(keysFromReddit);
-
-    // eslint-disable-next-line no-unused-vars, prefer-const
-    let timer = setInterval(huntKeys, interval);
   } catch (error) {
     winston.error(error);
   }
 }
 
 huntKeys();
+// eslint-disable-next-line no-unused-vars, prefer-const
+let timer = setInterval(huntKeys, interval);
