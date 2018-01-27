@@ -25,8 +25,8 @@ const threadCache = new NodeCache();
 const subreddit = SUBREDDIT || 'seaofthieves';
 const twitterHashtag = TWITTER_HASHTAG || '#seaofthieves';
 const interval = INTERVAL || 10000;
-const keyRegex = /([^-]{5}-[^-]{5}-[^-]{5}-[^-]{5}-[^-]{5})/g;
-const keyMentionRegex = /(giveaway|code|token|key)/g;
+const keyRegex = /([^-]{5}-[^-]{5}-[^-]{5}-[^-]{5}-[^-]{5})/gi;
+const keyMentionRegex = /(giveaway|code|token|key)/gi;
 const twitterBase64 = (Buffer.from(`${TWITTER_CONSUMER_KEY}:${TWITTER_CONSUMER_SECRET}`, 'ascii')).toString('base64');
 
 let twitterToken = '';
