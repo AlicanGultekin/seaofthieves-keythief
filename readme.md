@@ -20,7 +20,7 @@ npm i
 
 + PROXY (string) is optional, use if you are running this behind a proxy
 
-+ DEBUG (boolean) is optional, use if you want by pass key matching and post every new thread in the subreddit, by default it's false.
++ DEBUG (boolean) is optional, use if you want to bypass key matching and post every new thread in the subreddit, by default it's false.
 
 #### Twitter
 
@@ -42,6 +42,11 @@ You can also extend the code with whatever notification method you want.
 + SLACK_CHANNEL (string) is the channel, person, etc.
 
 More info here: [Slack Incoming Webhook API](https://api.slack.com/incoming-webhooks)
+
+#### Discord
+
+If you want to post to Discord instead of Slack, just add /slack at the end of your Discord webhook url
+More information here: [Discord Webhook API](https://discordapp.com/developers/docs/resources/webhook#execute-slackcompatible-webhook)
 
 ### Running :rocket:
 
