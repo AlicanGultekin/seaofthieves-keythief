@@ -14,7 +14,7 @@ const NodeCache = require('node-cache');
 const threadCache = new NodeCache();
 const subreddit = SUBREDDIT || 'seaofthieves';
 const interval = INTERVAL || 10000;
-const keyRegex = /.{5}-.{5}-.{5}-.{5}-.{5}/g;
+const keyRegex = /[^-]{5}-[^-]{5}-[^-]{5}-[^-]{5}-[^-]{5}/g;
 
 let count = 0;
 
