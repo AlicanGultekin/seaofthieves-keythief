@@ -1,12 +1,12 @@
 # Keythief :skull:
 
-## Scans Sea of Thieves subreddit and parses closed beta keys :key:
+## Scans for Sea of Thieves closed beta keys :key:
 
 ### Installation :computer:
 
 ```
-git clone https://github.com/Vitaefinis/seaofthieves-reddit-keythief.git
-cd seaofthieves-reddit-keythief
+git clone https://github.com/Vitaefinis/seaofthieves-keythief.git
+cd seaofthieves-keythief
 npm i
 ```
 
