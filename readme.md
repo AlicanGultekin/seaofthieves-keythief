@@ -22,6 +22,16 @@ npm i
 
 + DEBUG (boolean) is optional, use if you want by pass key matching and post every new thread in the subreddit, by default it's false.
 
+#### Twitter
+
++ TWITTER_CONSUMER_KEY (string) is optional, specify if you want to query Twitter
+ 
++ TWITTER_CONSUMER_SECRET (string) is optional, specify if you want to query Twitter
+
++ TWITTER_HASHTAG (string) is optional, specifiy hashtag to query, by default it's #seaofthieves
+
+You can get your key and secret by creating an app here: [Twitter Apps](https://apps.twitter.com)
+
 #### Slack
 
 If Slack related variables are not used, results can still be seen on the console.
@@ -41,6 +51,8 @@ More info here: [Slack Incoming Webhook API](https://api.slack.com/incoming-webh
 
 ## TODO
 
-+ Create a separate notification handler module with uniform interface so that people can add their choice of notifications easily
++ Refactor
++ Create a separate notification handler module with uniform interface so that people can add their choice of notifications easily, for e.g.: Discord, Telegram, Slack, Twitter, etc.
++ Create separate parsers for Reddit, Twitter, Instagram etc.
 
 ## Enjoy :bomb::boom::fire:
