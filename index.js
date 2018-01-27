@@ -43,7 +43,7 @@ async function findKey(parsedNewPosts) {
     let result = null;
     try {
       // eslint-disable-next-line eqeqeq
-      if ((newPost.title.match(/.*key.*/g) || newPost.selftext.match(keyRegex) || DEBUG == 'true') && !threadCache.get(newPost.id)) {
+      if ((newPost.selftext.match(keyRegex) || DEBUG == 'true') && !threadCache.get(newPost.id)) {
         result = {
           id: newPost.id,
           title: newPost.title,
