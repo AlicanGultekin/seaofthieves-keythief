@@ -1,7 +1,7 @@
 {
-  "name": "seaofthieves-reddit-keythief",
+  "name": "seaofthieves-keythief",
   "version": "1.0.0",
-  "description": "Scans Sea of Thieves subreddit and parses closed beta keys",
+  "description": "Scans for Sea of Thieves closed beta keys",
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vitaefinis/seaofthieves-reddit-keythief.git"
+    "url": "git+https://github.com/Vitaefinis/seaofthieves-keythief.git"
   },
   "bugs": {
-    "url": "https://github.com/Vitaefinis/seaofthieves-reddit-keythief/issues"
+    "url": "https://github.com/Vitaefinis/seaofthieves-keythief/issues"
   },
-  "homepage": "https://github.com/Vitaefinis/seaofthieves-reddit-keythief#readme",
+  "homepage": "https://github.com/Vitaefinis/seaofthieves-keythief#readme",
   "readme": "readme.md",
   "author": {
     "name": "Alican Gültekin",
