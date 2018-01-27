@@ -41,12 +41,16 @@ You can also extend the code with whatever notification method you want.
 
 + SLACK_CHANNEL (string) is the channel, person, etc.
 
-More info here: [Slack Incoming Webhook API](https://api.slack.com/incoming-webhooks)
+More info here [Slack Incoming Webhook API](https://api.slack.com/incoming-webhooks)
 
 #### Discord
 
-If you want to post to Discord instead of Slack, just add /slack at the end of your Discord webhook url
-More information here: [Discord Webhook API](https://discordapp.com/developers/docs/resources/webhook#execute-slackcompatible-webhook)
+If you want to post to Discord instead of Slack, just add /slack at the end of your Discord webhook url, you'll still need to use SLACK_URL for this.
+More information here [Discord Webhook API](https://discordapp.com/developers/docs/resources/webhook#execute-slackcompatible-webhook)
+
+#### Twitch
++ TWITCH_KEY (string) get it from here [Twitch Chat OAuth Password Generator](http://twitchapps.com/tmi/)
++ TWITCH_CHANNEL (string) name of your channel the bot should connect to
 
 ### Running :rocket:
 

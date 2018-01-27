@@ -5,6 +5,9 @@ const {
   TWITTER_CONSUMER_KEY,
   TWITTER_CONSUMER_SECRET,
   TWITTER_HASHTAG,
+  TWITCH_KEY,
+  TWITCH_BOT_NAME,
+  TWITCH_CHANNEL,
   INTERVAL,
   PROXY,
   DEBUG,
@@ -15,6 +18,8 @@ const jsonpath = require('jsonpath');
 const winston = require('winston');
 const NodeCache = require('node-cache');
 const urlencode = require('urlencode');
+const TwitchBot = require('twitch-bot');
+const crypto = require('crypto');
 
 const threadCache = new NodeCache();
 const subreddit = SUBREDDIT || 'seaofthieves';
@@ -25,6 +30,45 @@ const keyMentionRegex = /(giveaway|code|token|key)/g;
 const twitterBase64 = (Buffer.from(`${TWITTER_CONSUMER_KEY}:${TWITTER_CONSUMER_SECRET}`, 'ascii')).toString('base64');
 
 let twitterToken = '';
+let twitchBot;
+
+if (TWITCH_KEY && TWITCH_CHANNEL) {
+  winston.info(TWITCH_BOT_NAME, TWITCH_CHANNEL, TWITCH_KEY);
+  twitchBot = new TwitchBot({
+    username: TWITCH_BOT_NAME || 'Key Thief',
+    oauth: TWITCH_KEY,
+    channels: [TWITCH_CHANNEL],
+  });
+
+  twitchBot.on('join', () => {
+    const joinMessage = 'Ben geldim!';
+    twitchBot.say(joinMessage);
+    winston.info(`${TWITCH_BOT_NAME} joined ${TWITCH_CHANNEL}.`);
+  });
+
+  twitchBot.on('part', () => {
+    winston.info(`${TWITCH_BOT_NAME} left ${TWITCH_CHANNEL}.`);
+  });
+
+  twitchBot.on('error', (err) => {
+    winston.error(err);
+  });
+
+  twitchBot.join(TWITCH_CHANNEL);
+}
+
+function hash(input) {
+  if (!input) {
+    throw new Error('Missing input for hash!');
+  }
+
+  try {
+    return crypto.createHash('md5').update(input).digest('hex');
+  } catch (error) {
+    winston.error(error);
+    return null;
+  }
+}
 
 function removeDuplicatesFromArray(arr) {
   return arr.filter((elem, index, self) => index === self.indexOf(elem));
@@ -96,11 +140,11 @@ async function findKeysFromTwitter(parsedPosts) {
       let result = null;
       try {
         const keyRegexMatches = post.text.match(keyRegex);
-        const keyMentionRegexMatches = post.text.match(keyMentionRegex);
-        if (keyMentionRegexMatches) removeDuplicatesFromArray(keyMentionRegexMatches);
+        let keyMentionRegexMatches = post.text.match(keyMentionRegex);
+        if (keyMentionRegexMatches) keyMentionRegexMatches = removeDuplicatesFromArray(keyMentionRegexMatches);
 
         // eslint-disable-next-line eqeqeq
-        if ((keyRegexMatches || keyMentionRegexMatches || DEBUG == 'true') && !threadCache.get(post.id_str)) {
+        if ((keyRegexMatches || keyMentionRegexMatches || DEBUG == 'true') && threadCache.get(post.id_str) !== hash(post.text)) {
           result = {
             id: post.id_str,
             body: `${post.text}`,
@@ -158,11 +202,11 @@ async function findKeys(parsedNewPosts) {
       let result = null;
       try {
         const keyRegexMatches = newPost.selftext.match(keyRegex);
-        /* const keyMentionRegexMatches = newPost.selftext.match(keyMentionRegex);
-        if (keyMentionRegexMatches) removeDuplicatesFromArray(keyMentionRegexMatches); */
+        /* let keyMentionRegexMatches = newPost.selftext.match(keyMentionRegex);
+        if (keyMentionRegexMatches) keyMentionRegexMatches = removeDuplicatesFromArray(keyMentionRegexMatches); */
 
         // eslint-disable-next-line eqeqeq
-        if ((keyRegexMatches /* || keyMentionRegexMatches */ || DEBUG == 'true') && !threadCache.get(newPost.id)) {
+        if ((keyRegexMatches /* || keyMentionRegexMatches */ || DEBUG == 'true') && threadCache.get(newPost.id) !== hash(newPost.selftext)) {
           result = {
             id: newPost.id,
             title: newPost.title,
@@ -239,6 +283,18 @@ async function postToSlack(data, url = SLACK_URL, channel = SLACK_CHANNEL) {
   }
 }
 
+async function sendKeysToTwitchChat(data) {
+  if (data.keys) {
+    twitchBot.say('R) Bu closed beta keyler taze düştü, ? varsa orayı kendiniz A-Z 0-9 deneyeceksiniz');
+    data.keys.map(key => twitchBot.say(key));
+  }
+  if (data.mentions) {
+    twitchBot.say(`R) Şu kelimelerden bahsedilmiş: ${data.mentions.join(', ')} `);
+    twitchBot.say(data.body);
+    twitchBot.say(data.url);
+  }
+}
+
 async function postResults(keys) {
   if (!keys) {
     throw new Error('Missing keys!\n');
@@ -249,9 +305,10 @@ async function postResults(keys) {
     for (let index = 0; index < keys.length; index++) {
       const element = keys[index];
       if (element) {
-        threadCache.set(element.id, true);
+        threadCache.set(element.id, hash(element.body));
         winston.info(JSON.stringify(element, null, 4));
         if (SLACK_URL) postToSlack(element);
+        if (TWITCH_CHANNEL && TWITCH_KEY) sendKeysToTwitchChat(element);
       }
     }
   } catch (error) {
