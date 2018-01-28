@@ -49,7 +49,7 @@ if (TWITCH_KEY && TWITCH_CHANNEL) {
 
   twitchBot.on('part', () => {
     winston.info(`${TWITCH_BOT_NAME} left ${TWITCH_CHANNEL}.`);
-    twitchBot.join(TWITCH_CHANNEL);
+    // twitchBot.join(TWITCH_CHANNEL);
   });
 
   twitchBot.on('error', (err) => {
