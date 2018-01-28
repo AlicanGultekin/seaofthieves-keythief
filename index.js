@@ -9,6 +9,7 @@ const {
   TWITCH_BOT_NAME,
   TWITCH_CHANNEL,
   INTERVAL,
+  KEY_ONLY,
   PROXY,
   DEBUG,
 } = require('./config');
@@ -41,13 +42,14 @@ if (TWITCH_KEY && TWITCH_CHANNEL) {
   });
 
   twitchBot.on('join', () => {
-    const joinMessage = 'Ben geldim!';
+    const joinMessage = 'Burdayım!';
     twitchBot.say(joinMessage);
     winston.info(`${TWITCH_BOT_NAME} joined ${TWITCH_CHANNEL}.`);
   });
 
   twitchBot.on('part', () => {
     winston.info(`${TWITCH_BOT_NAME} left ${TWITCH_CHANNEL}.`);
+    twitchBot.join(TWITCH_CHANNEL);
   });
 
   twitchBot.on('error', (err) => {
@@ -140,11 +142,16 @@ async function findKeysFromTwitter(parsedPosts) {
       let result = null;
       try {
         const keyRegexMatches = post.text.match(keyRegex);
-        let keyMentionRegexMatches = post.text.match(keyMentionRegex);
-        if (keyMentionRegexMatches) keyMentionRegexMatches = removeDuplicatesFromArray(keyMentionRegexMatches);
+        let keyMentionRegexMatches = null;
 
         // eslint-disable-next-line eqeqeq
-        if ((keyRegexMatches || keyMentionRegexMatches || DEBUG == 'true') && threadCache.get(post.id_str) !== hash(post.text)) {
+        if (!KEY_ONLY == true) {
+          keyMentionRegexMatches = post.text.match(keyMentionRegex);
+          if (keyMentionRegexMatches) keyMentionRegexMatches = removeDuplicatesFromArray(keyMentionRegexMatches);
+        }
+
+        // eslint-disable-next-line eqeqeq
+        if ((keyRegexMatches || keyMentionRegexMatches || DEBUG == true) && threadCache.get(post.id_str) !== hash(post.text)) {
           result = {
             id: post.id_str,
             body: `${post.text}`,

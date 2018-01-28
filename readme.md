@@ -20,7 +20,9 @@ npm i
 
 + PROXY (string) is optional, use if you are running this behind a proxy
 
-+ DEBUG (boolean) is optional, use if you want to bypass key matching and post every new thread in the subreddit, by default it's false.
++ DEBUG (boolean) is optional, use if you want to bypass key matching and post every new thread in the subreddit, by default it's false
+
++ KEY_ONLY (boolean) is optional, use if you want to receive only direct key matches and not related Tweets, by default it's false
 
 #### Twitter
 
@@ -34,8 +36,8 @@ You can get your key and secret by creating an app here: [Twitter Apps](https://
 
 #### Slack
 
-If Slack related variables are not used, results can still be seen on the console.
-You can also extend the code with whatever notification method you want.
+If Slack related variables are not used, results can still be seen on the console
+You can also extend the code with whatever notification method you want
 
 + SLACK_URL (string) is a Slack webhook url
 
@@ -45,7 +47,7 @@ More info here [Slack Incoming Webhook API](https://api.slack.com/incoming-webho
 
 #### Discord
 
-If you want to post to Discord instead of Slack, just add /slack at the end of your Discord webhook url, you'll still need to use SLACK_URL for this.
+If you want to post to Discord instead of Slack, just add /slack at the end of your Discord webhook url, you'll still need to use SLACK_URL for this
 More information here [Discord Webhook API](https://discordapp.com/developers/docs/resources/webhook#execute-slackcompatible-webhook)
 
 #### Twitch
