@@ -42,7 +42,7 @@ if (TWITCH_KEY && TWITCH_CHANNEL) {
   });
 
   twitchBot.on('join', () => {
-    const joinMessage = 'Burdayım!';
+    const joinMessage = 'R) Arada bir Sea of Thieves kapalı beta kodu dağıtıyorum. Eğer kod attığımda içinde ? varsa orayı kendiniz A-Z 0-9 deneyeceksiniz.';
     twitchBot.say(joinMessage);
     winston.info(`${TWITCH_BOT_NAME} joined ${TWITCH_CHANNEL}.`);
   });
