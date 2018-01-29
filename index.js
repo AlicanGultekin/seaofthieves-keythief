@@ -344,7 +344,7 @@ async function postResults(keys) {
       if (element) {
         threadCache.set(element.id, element.keys ? hash(element.keys.join(' | ')) : hash(element.body));
         winston.info(JSON.stringify(element, null, 4));
-        if (wss && element.keys) wss.broadcast({ keys: element.keys });
+        if (wss && element.keys) wss.broadcast(JSON.stringify({ keys: element.keys }));
         if (SLACK_URL) postToSlack(element);
         if (TWITCH_CHANNEL && TWITCH_KEY) sendKeysToTwitchChat(element);
       }
