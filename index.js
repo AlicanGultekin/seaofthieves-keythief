@@ -11,6 +11,7 @@ const {
   INTERVAL,
   KEY_ONLY,
   PROXY,
+  WEBSOCKET_SERVER_PORT,
   DEBUG,
 } = require('./config');
 
@@ -20,6 +21,7 @@ const winston = require('winston');
 const NodeCache = require('node-cache');
 const urlencode = require('urlencode');
 const TwitchBot = require('twitch-bot');
+const WebSocketServer = require('uws');
 const crypto = require('crypto');
 
 const threadCache = new NodeCache();
@@ -30,8 +32,36 @@ const keyRegex = /([^-]{5}-[^-]{5}-[^-]{5}-[^-]{5}-[^-]{5})/gi;
 const keyMentionRegex = /(giveaway|code|token|key)/gi;
 const twitterBase64 = (Buffer.from(`${TWITTER_CONSUMER_KEY}:${TWITTER_CONSUMER_SECRET}`, 'ascii')).toString('base64');
 
-let twitterToken = '';
-let twitchBot;
+let twitterToken = null;
+let twitchBot = null;
+let wss = null;
+
+async function onMessage(message) {
+  winston.info('WebSocket message received', message);
+}
+
+if (WEBSOCKET_SERVER_PORT) {
+  try {
+    const wssPort = Number.parseInt(WEBSOCKET_SERVER_PORT, 10);
+
+    wss = new WebSocketServer.Server({ port: wssPort });
+
+    wss.broadcast = (data) => {
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocketServer.OPEN) {
+          client.send(data);
+        }
+      });
+    };
+
+    wss.on('connection', async (ws) => {
+      ws.on('message', onMessage);
+      ws.send('Connection OK');
+    });
+  } catch (error) {
+    winston.error(error);
+  }
+}
 
 if (TWITCH_KEY && TWITCH_CHANNEL) {
   winston.info(TWITCH_BOT_NAME, TWITCH_CHANNEL, TWITCH_KEY);
@@ -314,6 +344,7 @@ async function postResults(keys) {
       if (element) {
         threadCache.set(element.id, element.keys ? hash(element.keys.join(' | ')) : hash(element.body));
         winston.info(JSON.stringify(element, null, 4));
+        if (wss && element.keys) wss.broadcast({ keys: element.keys });
         if (SLACK_URL) postToSlack(element);
         if (TWITCH_CHANNEL && TWITCH_KEY) sendKeysToTwitchChat(element);
       }

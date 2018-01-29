@@ -54,6 +54,9 @@ More information here [Discord Webhook API](https://discordapp.com/developers/do
 + TWITCH_KEY (string) get it from here [Twitch Chat OAuth Password Generator](http://twitchapps.com/tmi/)
 + TWITCH_CHANNEL (string) name of your channel the bot should connect to
 
+#### Web Socket
++ WEBSOCKET_SERVER_PORT (number) optional, specify if you want to create a web socket server and broadcast keys to that
+
 ### Running :rocket:
 
 + ```npm start```
