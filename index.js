@@ -213,7 +213,7 @@ async function findKeys(parsedNewPosts) {
         if (keyMentionRegexMatches) keyMentionRegexMatches = removeDuplicatesFromArray(keyMentionRegexMatches); */
 
         // eslint-disable-next-line eqeqeq
-        if ((keyRegexMatches /* || keyMentionRegexMatches */ || DEBUG == 'true') && threadCache.get(newPost.id) !== hash(newPost.selftext)) {
+        if ((keyRegexMatches /* || keyMentionRegexMatches */ || DEBUG == 'true') && threadCache.get(newPost.id) !== (keyRegexMatches ? hash(keyRegexMatches.join(' | ')) : hash(newPost.selftext))) {
           result = {
             id: newPost.id,
             title: newPost.title,
@@ -312,7 +312,7 @@ async function postResults(keys) {
     for (let index = 0; index < keys.length; index++) {
       const element = keys[index];
       if (element) {
-        threadCache.set(element.id, hash(element.body));
+        threadCache.set(element.id, element.keys ? hash(element.keys.join(' | ')) : hash(element.body));
         winston.info(JSON.stringify(element, null, 4));
         if (SLACK_URL) postToSlack(element);
         if (TWITCH_CHANNEL && TWITCH_KEY) sendKeysToTwitchChat(element);
